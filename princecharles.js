@@ -1,3 +1,5 @@
+'use strict';
+
 let dateFormat = require('dateformat'),
     url = require('url'),
     rp = require('request-promise');

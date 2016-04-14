@@ -1,5 +1,7 @@
+'use strict';
 let express = require('express'),
-    princeCharles = require('./princecharles');
+    princeCharles = require('./princecharles'),
+    movies = require('./movies');
 
 let app = express();
 
@@ -9,8 +11,12 @@ app.get('/films', (req, res) => {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     princeCharles.getMoviesForDate(tomorrow)
-        .then((movies) => res.json(movies))
+        .then(movies.filterFullShowings)
+        .then(movies.aggregateShowings)
+        // .then(imdb.fetchIMDBRatings)
+        .then((movies)=> res.json(movies))
         .catch((err) => {
+            console.trace();
             console.log(err);
             res.send(err);
         });
