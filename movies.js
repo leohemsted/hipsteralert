@@ -1,6 +1,8 @@
 'use strict';
+/* global -Promise */
 
-let Promise = require('bluebird');
+let Promise = require('bluebird'),
+    princeCharles = require('./princecharles');
 // a few functions for filtering movies - unless otherwise specified,
 // movies is an array of dicts with format as follows
 // {
@@ -13,8 +15,7 @@ let Promise = require('bluebird');
 // },
 
 module.exports.filterFullShowings = movies => Promise.filter(movies, movie => {
-    // todo: go to prince charles and see if film has seats available
-    return true;
+    return princeCharles.getSeatAvailability(movie.slug).then(seats => seats > 1);
 });
 
 module.exports.aggregateShowings = movies => movies.reduce(

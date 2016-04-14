@@ -1,11 +1,12 @@
 'use strict';
 
 let dateFormat = require('dateformat'),
+    cheerio = require('cheerio'),
     url = require('url'),
     rp = require('request-promise');
 
-module.exports.getMoviesForDate = date => {
-    let options = {
+module.exports.getMoviesForDate = date =>
+    rp({
         url: url.format({
             protocol: 'https',
             host: 'www.princecharlescinema.com',
@@ -16,6 +17,19 @@ module.exports.getMoviesForDate = date => {
             }
         }),
         json: true
-    };
-    return rp(options);
-};
+    });
+
+module.exports.getSeatAvailability = slug =>
+    rp({
+        url: url.format({
+            protocol: 'https',
+            host: 'www.jack-roe.co.uk',
+            pathname: 'websales/sales/prilon/book',
+            query: {perfcode: slug}
+        })
+    }).then(data => {
+        let $ = cheerio.load(data),
+            seatsRegex = /Available Seats :\s+(\d+)/;
+        let perfDetails = $('.performance-description').text();
+        return +seatsRegex.exec(perfDetails)[1];
+    });

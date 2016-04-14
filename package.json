@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.3.5",
+    "cheerio": "^0.20.0",
     "dateformat": "^1.0.12",
     "express": "^4.13.4",
     "request-promise": "^2.0.1"
