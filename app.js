@@ -1,21 +1,19 @@
-var express = require('express'),
-    https = require('https');
+let express = require('express'),
+    princeCharles = require('./princecharles');
 
-var app = express();
+let app = express();
 
 app.get('/films', (req, res) => {
-    let constructPath = (date) => {
+    // so dumb
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    };
-    let today = new Date();
-    let options = {
-        hostname: 'princecharlescinema.com',
-        path: constructPath(today)
-    };
-    https.request(options, (res) => {
-
-    });
-    res.send('Hello World!');
+    princeCharles.getMoviesForDate(tomorrow)
+        .then((movies) => res.json(movies))
+        .catch((err) => {
+            console.log(err);
+            res.send(err);
+        });
 });
 
-app.listen(3000);
+app.listen(3000, () => console.log('Listening on port 3000...'));
